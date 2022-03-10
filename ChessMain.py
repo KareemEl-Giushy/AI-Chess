@@ -16,8 +16,56 @@ BOARD_COLOR = (p.Color('white'), p.Color('gray'))
 MAX_FPS = 15
 IMAGES = {}
 
+# one-time load in memory
+def loadImages():
+    pieces = ['wP', 'wR', 'wN', 'wB', 'wQ', 'wK', 'bP', 'bR', 'bN', 'bB', 'bQ', 'bK']
+    
+    for piece in pieces:
+        IMAGES[piece] = p.transform.scale(p.image.load(dir_path + "/images/" + piece + ".png"), (SQ_size, SQ_size))
+
+    # Not: Get Any image by IMAGES['piece_name'];
+# ======================================
+# responsible for all the graphics in the current game state
+# ======================================
+def drawGameState(screen, gs):
+    drawBoard(screen) # draw squares on the board
+
+    # => add in piece highlighting later on in the project <= #
+    
+    drawPieces(screen, gs.board) # draw pieces on top of the board
+
+# ** The top left squre is always white (black bottom left)**
+def drawBoard(screen):
+    for i in range(DIMENSION):
+        for j in range(DIMENSION):
+            color = BOARD_COLOR[(i + j) % 2 ] # if it is even it's white, if it is odd it's gray
+            p.draw.rect(screen, color, p.Rect(SQ_size * j, SQ_size * i, SQ_size, SQ_size))
+
+# ** Do highlight under the piece but above the square ** #
+def drawPieces(screen, b):
+    for row in range(DIMENSION):
+        for col in range(DIMENSION):
+            piece = b[row][col]
+            if piece != '--':
+                screen.blit(IMAGES[piece], (SQ_size * col, SQ_size * row))
+
 def main():
-    pass
+    p.init()
+    screen = p.display.set_mode((WIDTH, HIGHT))
+    clock = p.time.Clock()
+    screen.fill(p.Color("white"))
+    # Game State
+    gs = ChessEngine.GameState()
+    loadImages() # load only once
+    running = True
+    while running:
+        for e in p.event.get():
+            if e.type == p.QUIT:
+                running = False
+        
+        drawGameState(screen, gs)
+        clock.tick(MAX_FPS)
+        p.display.flip()
 
 
 if __name__ == '__main__':
