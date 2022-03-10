@@ -56,6 +56,8 @@ def main():
     screen.fill(p.Color("white"))
     # Game State
     gs = ChessEngine.GameState()
+    vaildMoves = gs.getValidMoves()
+    moveMade = False # Flag Variable to triger movement
     loadImages() # load only once
     running = True
     selectedSq = ()
@@ -80,14 +82,21 @@ def main():
                 if len(sqClicks) == 2 and gs.board[sqClicks[0][0]][sqClicks[0][1]] != '--':
                     mov = ChessEngine.Move(sqClicks[0], sqClicks[1], gs.board)
                     print(mov.getMoveNotation())
-                    gs.makeMove(mov)
+                    if mov in vaildMoves:
+                        gs.makeMove(mov)
+                        moveMade = True
                     selectedSq = ()
                     sqClicks = []
             # Key Handlers
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_z:
                     gs.undoMove()
+                    moveMade = True
         
+        if moveMade:
+            vaildMoves = gs.getValidMoves()
+            moveMade = False
+
         drawGameState(screen, gs)
         clock.tick(MAX_FPS)
         p.display.flip()

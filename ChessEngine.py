@@ -38,6 +38,23 @@ class GameState():
             self.board[move.endRow][move.endCol] = move.pieceCaptured
             self.whiteToMove = not self.whiteToMove
 
+    # all Moves Considering Checks
+    def getValidMoves(self):
+        return self.getAllPossibleMoves()
+    
+    def getAllPossibleMoves(self):
+        moves = [Move((6, 6), (4, 6), self.board)]
+        for r in range(8):
+            for c in range(8):
+                pieceColor = self.board[r][c][0]
+                if (pieceColor == 'w' and self.whiteToMove) or (pieceColor == 'b' and not self.whiteToMove):
+                    piece = self.board[r][c][1]
+                    if piece == 'P':
+                        self.getPawnMoves()
+                    elif piece == 'R':
+                        self.getRookMoves()
+        return moves
+
 class Move():
 
     rankToRow = {"1": 7, "2": 6, "3": 5, "4": 4,"5": 3, "6":2, "7": 1, "8": 0}
@@ -53,6 +70,11 @@ class Move():
         self.endCol = endSq[1]
         self.pieceMoved = board[self.startRow][self.startCol]
         self.pieceCaptured = board[self.endRow][self.endCol]
+        self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
+
+    def __eq__(self, other):
+        if isinstance(other, Move):
+            return self.moveID == other.moveID
 
     # Generate Real Chess Notation
     def getMoveNotation(self):
