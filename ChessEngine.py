@@ -17,7 +17,7 @@ class GameState():
             ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
-            ["--", "--", "--", "--", "--", "--", "--", "--"],
+            ["--", "--", "wR", "bR", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
@@ -93,7 +93,43 @@ class GameState():
     # PawnMoves (Go Forward, 2 Square Forward, Caputer Right, Capture Left)
     # =====================================================================
     def getRookMoves(self, r, c, moves):
-        pass
+        color = self.board[r][c][0]
+        
+        i = r + 1
+        while i <= 7 and i >= 0: # Move Forward On The Board (vertically on board)
+            if self.board[i][c] == '--':
+                moves.append(Move((r, c), (i, c), self.board))
+            elif self.board[i][c][0] != color:
+                moves.append(Move((r, c), (i, c), self.board))
+                break
+            i += 1
+        
+        i = r - 1
+        while i >= 0 and i <= 7: 
+            if self.board[i][c] == '--': # Move backward On The Board (vertically on board)
+                moves.append(Move((r, c), (i, c), self.board))
+            elif self.board[i][c][0] != color:
+                moves.append(Move((r, c), (i, c), self.board))
+                break
+            i -= 1
+        
+        j = c + 1
+        while j <= 7 and j >= 0: # Move Forward On The Board (Horizontally on board)
+            if self.board[r][j] == '--':
+                moves.append(Move((r, c), (r, j), self.board))
+            elif self.board[r][j][0] != color:
+                moves.append(Move((r, c), (r, j), self.board))
+                break
+            j += 1
+        
+        j = c - 1
+        while j <= 7 and j >= 0: # Move backward On The Board (Horizontally on board)
+            if self.board[r][j] == '--':
+                moves.append(Move((r, c), (r, j), self.board))
+            elif self.board[r][j][0] != color:
+                moves.append(Move((r, c), (r, j), self.board))
+                break
+            j -= 1
 
     # =====================================================================
     # KnightMoves 
