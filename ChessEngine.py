@@ -18,7 +18,7 @@ class GameState():
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "wR", "bR", "--", "--", "--", "--"],
-            ["--", "--", "--", "--", "--", "--", "--", "--"],
+            ["--", "--", "--", "--", "wB", "--", "--", "--"],
             ["wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
         ]
@@ -138,10 +138,58 @@ class GameState():
         pass
 
     # =====================================================================
-    # BishopMoves
+    # BishopMoves Diagonally (Forward-Right, Forward-Left, Backward-Right, Backward-Left)
     # =====================================================================
     def getBishopMoves(self, r, c, moves):
-        pass
+        color = self.board[r][c][0]
+
+        # Move Diagonally Forward-Right
+        i = r + 1
+        j = c + 1
+        while (i <= 7 and i >= 0) and (j <= 7 and j >= 0):
+            if self.board[i][j] == '--':
+                moves.append(Move((r, c), (i, j), self.board))
+            elif self.board[i][j][0] != color:
+                moves.append(Move((r, c), (i, j), self.board))
+                break
+            i += 1
+            j += 1
+
+        # Move Diagonally Forward-Left
+        i = r + 1
+        j = c - 1
+        while (i <= 7 and i >= 0) and (j <= 7 and j >= 0):
+            if self.board[i][j] == '--':
+                moves.append(Move((r, c), (i, j), self.board))
+            elif self.board[i][j][0] != color:
+                moves.append(Move((r, c), (i, j), self.board))
+                break
+            i += 1
+            j -= 1
+
+        # Move Diagonally Backward-Right
+        i = r - 1
+        j = c + 1
+        while (i <= 7 and i >= 0) and (j <= 7 and j >= 0):
+            if self.board[i][j] == '--':
+                moves.append(Move((r, c), (i, j), self.board))
+            elif self.board[i][j][0] != color:
+                moves.append(Move((r, c), (i, j), self.board))
+                break
+            i -= 1
+            j += 1
+
+        # Move Diagonally Backward-Left
+        i = r - 1
+        j = c - 1
+        while (i <= 7 and i >= 0) and (j <= 7 and j >= 0):
+            if self.board[i][j] == '--':
+                moves.append(Move((r, c), (i, j), self.board))
+            elif self.board[i][j][0] != color:
+                moves.append(Move((r, c), (i, j), self.board))
+                break
+            i -= 1
+            j -= 1
 
     # =====================================================================
     # QueenMoves 
