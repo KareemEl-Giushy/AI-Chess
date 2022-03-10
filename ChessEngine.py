@@ -90,7 +90,7 @@ class GameState():
                     moves.append(Move((r, c), (r+1, c-1), self.board))
 
     # =====================================================================
-    # PawnMoves (Go Forward, 2 Square Forward, Caputer Right, Capture Left)
+    # RookMoves (Forward Vertical, backward Vertical, Forward Horizontal, Backward Horizontal)
     # =====================================================================
     def getRookMoves(self, r, c, moves):
         color = self.board[r][c][0]
@@ -138,7 +138,7 @@ class GameState():
         pass
 
     # =====================================================================
-    # KnightMoves 
+    # BishopMoves
     # =====================================================================
     def getBishopMoves(self, r, c, moves):
         pass
