@@ -195,7 +195,8 @@ class GameState():
     # QueenMoves 
     # =====================================================================
     def getQueenMoves(self, r, c, moves):
-        pass
+        self.getRookMoves(r, c, moves)
+        self.getBishopMoves(r, c, moves)
 
     # =====================================================================
     # KingMoves 
