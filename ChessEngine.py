@@ -17,8 +17,8 @@ class GameState():
             ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
-            ["--", "--", "wR", "bR", "--", "--", "--", "--"],
-            ["--", "--", "--", "--", "wB", "--", "--", "--"],
+            ["--", "--", "--", "--", "--", "--", "--", "--"],
+            ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
         ]
@@ -202,7 +202,36 @@ class GameState():
     # KingMoves 
     # =====================================================================
     def getKingMoves(self, r, c, moves):
-        pass
+        color = self.board[r][c][0]
+        if r + 1 <= 7:
+            if self.board[r+1][c][0] != color: # forward
+                moves.append(Move((r, c), (r+1, c), self.board))
+        if r - 1 >= 0:    
+            if self.board[r-1][c][0] != color: # backward
+                moves.append(Move((r, c), (r-1, c), self.board))
+        
+        if c + 1 <= 7:
+            if self.board[r][c+1][0] != color: # right
+                moves.append(Move((r, c), (r, c+1), self.board))
+        if c - 1 >= 0:    
+            if self.board[r][c-1][0] != color: # left
+                moves.append(Move((r, c), (r, c-1), self.board))
+        
+        if (r + 1 <= 7 and r + 1 >= 0) and (c + 1 <= 7 and c + 1 >=0):
+            if self.board[r+1][c+1][0] != color: # forward-Right
+                moves.append(Move((r, c), (r+1, c+1), self.board))
+        
+        if (r - 1 <= 7 and r - 1 >= 0) and (c - 1 <= 7 and c - 1 >=0):      
+            if self.board[r-1][c-1][0] != color: #backward-left
+                moves.append(Move((r, c), (r-1, c-1), self.board))
+        
+        if (r + 1 <= 7 and r + 1 >= 0) and (c - 1 <= 7 and c - 1 >=0):  
+            if self.board[r+1][c-1][0] != color: # forward-left
+                moves.append(Move((r, c), (r+1, c-1), self.board))
+        
+        if (r - 1 <= 7 and r - 1 >= 0) and (c + 1 <= 7 and c + 1 >=0):    
+            if self.board[r-1][c+1][0] != color: # backward-right
+                moves.append(Move((r, c), (r-1, c+1), self.board))
 
 class Move():
 
