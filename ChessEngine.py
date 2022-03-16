@@ -135,7 +135,15 @@ class GameState():
     # KnightMoves 
     # =====================================================================
     def getKnightMoves(self, r, c, moves):
-        pass
+        directions = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (1, 2), (1, -2), (2, 1), (2, -1))
+        color = self.board[r][c][0]
+        for i in range(8):
+            endRow = r + directions[i][0]
+            endCol = c + directions[i][1]
+            if 0 <= endRow < 8 and 0 <= endCol < 8:
+                if self.board[endRow][endCol] != color:
+                    moves.append(Move((r, c), (endRow, endCol), self.board))
+
 
     # =====================================================================
     # BishopMoves Diagonally (Forward-Right, Forward-Left, Backward-Right, Backward-Left)
