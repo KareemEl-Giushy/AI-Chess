@@ -96,7 +96,7 @@ class GameState():
         color = self.board[r][c][0]
         
         i = r + 1
-        while i <= 7 and i >= 0: # Move Forward On The Board (vertically on board)
+        while 0 <= i < 8: # Move Forward On The Board (vertically on board)
             if self.board[i][c] == '--':
                 moves.append(Move((r, c), (i, c), self.board))
             elif self.board[i][c][0] != color:
@@ -105,7 +105,7 @@ class GameState():
             i += 1
         
         i = r - 1
-        while i >= 0 and i <= 7: 
+        while 0 <= i < 8: 
             if self.board[i][c] == '--': # Move backward On The Board (vertically on board)
                 moves.append(Move((r, c), (i, c), self.board))
             elif self.board[i][c][0] != color:
@@ -114,7 +114,7 @@ class GameState():
             i -= 1
         
         j = c + 1
-        while j <= 7 and j >= 0: # Move Forward On The Board (Horizontally on board)
+        while 0 <= j < 8: # Move Forward On The Board (Horizontally on board)
             if self.board[r][j] == '--':
                 moves.append(Move((r, c), (r, j), self.board))
             elif self.board[r][j][0] != color:
@@ -123,7 +123,7 @@ class GameState():
             j += 1
         
         j = c - 1
-        while j <= 7 and j >= 0: # Move backward On The Board (Horizontally on board)
+        while 0 <= j < 8: # Move backward On The Board (Horizontally on board)
             if self.board[r][j] == '--':
                 moves.append(Move((r, c), (r, j), self.board))
             elif self.board[r][j][0] != color:
@@ -154,7 +154,7 @@ class GameState():
         # Move Diagonally Forward-Right
         i = r + 1
         j = c + 1
-        while (i <= 7 and i >= 0) and (j <= 7 and j >= 0):
+        while 0 <= i < 8 and 0 <= j < 8:
             if self.board[i][j] == '--':
                 moves.append(Move((r, c), (i, j), self.board))
             elif self.board[i][j][0] != color:
@@ -166,7 +166,7 @@ class GameState():
         # Move Diagonally Forward-Left
         i = r + 1
         j = c - 1
-        while (i <= 7 and i >= 0) and (j <= 7 and j >= 0):
+        while 0 <= i < 8 and 0 <= j < 8:
             if self.board[i][j] == '--':
                 moves.append(Move((r, c), (i, j), self.board))
             elif self.board[i][j][0] != color:
@@ -178,7 +178,7 @@ class GameState():
         # Move Diagonally Backward-Right
         i = r - 1
         j = c + 1
-        while (i <= 7 and i >= 0) and (j <= 7 and j >= 0):
+        while 0 <= i < 8 and 0 <= j < 8:
             if self.board[i][j] == '--':
                 moves.append(Move((r, c), (i, j), self.board))
             elif self.board[i][j][0] != color:
@@ -190,7 +190,7 @@ class GameState():
         # Move Diagonally Backward-Left
         i = r - 1
         j = c - 1
-        while (i <= 7 and i >= 0) and (j <= 7 and j >= 0):
+        while 0 <= i < 8 and 0 <= j < 8:
             if self.board[i][j] == '--':
                 moves.append(Move((r, c), (i, j), self.board))
             elif self.board[i][j][0] != color:
