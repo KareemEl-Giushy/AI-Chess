@@ -85,8 +85,10 @@ def main():
                     if mov in vaildMoves:
                         gs.makeMove(mov)
                         moveMade = True
-                    selectedSq = ()
-                    sqClicks = []
+                        selectedSq = ()
+                        sqClicks = []
+                    else:
+                        sqClicks = [selectedSq]
             # Key Handlers
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_z:
