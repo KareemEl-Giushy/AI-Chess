@@ -79,7 +79,7 @@ def main():
                     selectedSq = (row, col)
                     sqClicks.append(selectedSq)
                 
-                if len(sqClicks) == 2 and gs.board[sqClicks[0][0]][sqClicks[0][1]] != '--':
+                if len(sqClicks) == 2:
                     mov = ChessEngine.Move(sqClicks[0], sqClicks[1], gs.board)
                     print(mov.getMoveNotation())
                     if mov in vaildMoves:
