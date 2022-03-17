@@ -32,11 +32,20 @@ class GameState():
         }
         self.whiteToMove = True
         self.moveLog = []
+        self.blackKingLocation = (0, 4)
+        self.whiteKingLocation = (7, 4)
+        self.inCheck = False
+        self.pins = []
+        self.checks = []
     
     def makeMove(self, move):
         self.board[move.startRow][move.startCol] = "--"
         self.board[move.endRow][move.endCol] = move.pieceMoved
         self.moveLog.append(move)
+        if move.pieceMoved == 'wK':
+            self.whiteKingLocation = (move.endRow, move.endCol)
+        elif move.pieceMoved == 'bk':
+            self.blackKingLocation = (move.endRow, move.endCol)
         self.whiteToMove = not self.whiteToMove
 
     def undoMove(self):
@@ -44,12 +53,70 @@ class GameState():
             move = self.moveLog.pop()
             self.board[move.startRow][move.startCol] = move.pieceMoved
             self.board[move.endRow][move.endCol] = move.pieceCaptured
+            if move.pieceMoved == 'wK':
+                self.whiteKingLocation = (move.startRow, move.startCol)
+            elif move.pieceMoved == 'bk':
+                self.blackKingLocation = (move.startRow, move.startCol)
             self.whiteToMove = not self.whiteToMove
 
     # all Moves Considering Checks
     def getValidMoves(self):
+        print(self.getPinsAndChecks())
         return self.getAllPossibleMoves()
-    
+
+    def getPinsAndChecks(self):
+        pins = []
+        check = []
+        inCheck = False
+        if self.whiteToMove:
+            enemy = 'b'
+            ally = 'w'
+            r = self.whiteKingLocation[0]
+            c = self.whiteKingLocation[1]
+        else:
+            enemy = 'w'
+            ally = 'b'
+            r = self.blackKingLocation[0]
+            c = self.blackKingLocation[1]
+        
+        vhDirection = ((-1, 0), (1, 0), (0, -1), (0, 1))
+        diagDirection = ((-1, -1), (1, 1), (-1, 1), (1, -1))
+        for j in range(8):
+            d = (vhDirection + diagDirection)[j]
+            possiblePin = ()
+            for i in range(1, 8):
+                endRow = r + d[0] * i
+                endCol = c + d[1] * i
+                if 0 <= endRow < 8 and 0 <= endCol < 8:
+                    endPiece = self.board[endRow][endCol]
+                    if endPiece[0] == ally:
+                        if possiblePin == ():
+                            possiblePin = (endRow, endCol, r, c)
+                        else:
+                            break
+                    elif endPiece[0] == enemy:
+                        if d in vhDirection:
+                            if endPiece[1] == 'R' or endPiece[1] == 'Q':
+                                if possiblePin == ():
+                                    inCheck = True
+                                    check.append((endRow, endCol, r, c))
+                                    break
+                                else:
+                                    pins.append(possiblePin)
+                                    break
+                        elif d in diagDirection:
+                            if endPiece[1] == 'B' or endPiece[1] == 'Q':
+                                if possiblePin == ():
+                                    inCheck = True
+                                    check.append((endRow, endCol, r, c))
+                                    break
+                                else:
+                                    pins.append(possiblePin)
+                                    break
+
+
+        return (inCheck, pins, check)
+
     def getAllPossibleMoves(self):
         moves = []
         for r in range(8):
@@ -58,7 +125,7 @@ class GameState():
                 if (pieceColor == 'w' and self.whiteToMove) or (pieceColor == 'b' and not self.whiteToMove):
                     piece = self.board[r][c][1]
                     self.getFunctionMove[piece](r, c, moves)
-        print(moves) # Just For Debuging
+        # print(moves) # Just For Debuging
         return moves
 
     # =====================================================================
