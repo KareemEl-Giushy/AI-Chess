@@ -117,17 +117,17 @@ class GameState():
 
         # Pawns Positions Checks
         if enemy == 'b':
-            if self.board[r-1][c-1][0] == 'b' and self.board[r-1][c-1][1] == 'P':
+            if self.board[r-1][c-1][0] == enemy and self.board[r-1][c-1][1] == 'P':
                 inCheck = True
                 check.append((r-1, c-1, r, c))
-            if self.board[r-1][c+1][0] == 'b' and self.board[r-1][c+1][1] == 'P':
+            if self.board[r-1][c+1][0] == enemy and self.board[r-1][c+1][1] == 'P':
                 inCheck = True
                 check.append((r-1, c+1, r, c))
         else:
-            if self.board[r+1][c-1][0] == 'w' and self.board[r+1][c-1][1] == 'P':
+            if self.board[r+1][c-1][0] == enemy and self.board[r+1][c-1][1] == 'P':
                 inCheck = True
                 check.append((r+1, c-1, r, c))
-            if self.board[r+1][c+1][0] == 'w' and self.board[r+1][c+1][1] == 'P':
+            if self.board[r+1][c+1][0] == enemy and self.board[r+1][c+1][1] == 'P':
                 inCheck = True
                 check.append((r+1, c+1, r, c))
 
