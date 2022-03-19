@@ -79,6 +79,7 @@ class GameState():
             r = self.blackKingLocation[0]
             c = self.blackKingLocation[1]
         
+        # Queen, Bishops, Rooks Positions Checks
         vhDirection = ((-1, 0), (1, 0), (0, -1), (0, 1))
         diagDirection = ((-1, -1), (1, 1), (-1, 1), (1, -1))
         for j in range(8):
@@ -114,6 +115,21 @@ class GameState():
                                     pins.append(possiblePin)
                                     break
 
+        # Pawns Positions Checks
+        if enemy == 'b':
+            if self.board[r-1][c-1][0] == 'b' and self.board[r-1][c-1][1] == 'P':
+                inCheck = True
+                check.append((r-1, c-1, r, c))
+            if self.board[r-1][c+1][0] == 'b' and self.board[r-1][c+1][1] == 'P':
+                inCheck = True
+                check.append((r-1, c+1, r, c))
+        else:
+            if self.board[r+1][c-1][0] == 'w' and self.board[r+1][c-1][1] == 'P':
+                inCheck = True
+                check.append((r+1, c-1, r, c))
+            if self.board[r+1][c+1][0] == 'w' and self.board[r+1][c+1][1] == 'P':
+                inCheck = True
+                check.append((r+1, c+1, r, c))
 
         return (inCheck, pins, check)
 
