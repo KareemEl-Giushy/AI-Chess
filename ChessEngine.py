@@ -44,7 +44,7 @@ class GameState():
         self.moveLog.append(move)
         if move.pieceMoved == 'wK':
             self.whiteKingLocation = (move.endRow, move.endCol)
-        elif move.pieceMoved == 'bk':
+        elif move.pieceMoved == 'bK':
             self.blackKingLocation = (move.endRow, move.endCol)
         self.whiteToMove = not self.whiteToMove
 
