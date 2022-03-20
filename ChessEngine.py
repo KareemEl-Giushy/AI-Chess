@@ -55,7 +55,7 @@ class GameState():
             self.board[move.endRow][move.endCol] = move.pieceCaptured
             if move.pieceMoved == 'wK':
                 self.whiteKingLocation = (move.startRow, move.startCol)
-            elif move.pieceMoved == 'bk':
+            elif move.pieceMoved == 'bK':
                 self.blackKingLocation = (move.startRow, move.startCol)
             self.whiteToMove = not self.whiteToMove
 
