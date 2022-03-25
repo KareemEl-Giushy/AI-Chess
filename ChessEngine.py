@@ -62,7 +62,41 @@ class GameState():
     # all Moves Considering Checks
     def getValidMoves(self):
         print(self.getPinsAndChecks())
-        return self.getAllPossibleMoves()
+        self.inCheck, self.pins, self.checks = self.getPinsAndChecks()
+        if self.whiteToMove:
+            kingRow = self.whiteKingLocation[0]
+            kingCol = self.whiteKingLocation[1]
+        else:
+            kingRow = self.blackKingLocation[0]
+            kingCol = self.blackKingLocation[1]
+
+        if self.inCheck:
+            if len(self.checks) == 1: # only one check move king or block check
+                moves = self.getAllPossibleMoves() # get all possible move to remove the invalid
+                check = self.checks[0]
+                checkRow = check[0]
+                checkCol = check[1]
+                pieceChecking = self.board[checkRow][checkCol]
+                validSquares = []
+                if pieceChecking[1] == 'N':
+                    validSquares = [(checkRow, checkCol)]
+                else:
+                    for i in range(1, 8):
+                        validSq = (kingRow + check[2] * i, kingCol + check[3] * i) # get valid square by king direction
+                        validSquares.append(validSq)
+                        if validSq[0] == checkRow and validSq[1] == checkCol: # once you reach the piece that is checking End Checks
+                            break
+                for i in range(len(moves) - 1, -1, -1):
+                    if moves[i].pieceMoved != 'K':
+                        if not (moves[i].endRow, moves[i].endCol) in validSquares: # if this possible move not in valid squares remove it
+                            moves.remove(moves[i])
+            else:
+                self.getKingMoves(kingRow, kingCol, moves)
+
+            print(validSquares) # print valid squares for debuging
+        else:
+            moves = self.getAllPossibleMoves()           
+        return moves
 
     def getPinsAndChecks(self):
         pins = []
@@ -92,15 +126,23 @@ class GameState():
                     endPiece = self.board[endRow][endCol]
                     if endPiece[0] == ally:
                         if possiblePin == ():
-                            possiblePin = (endRow, endCol, r, c)
+                            possiblePin = (endRow, endCol, d[0], d[1])
                         else:
                             break
                     elif endPiece[0] == enemy:
+                        if i == 1 and endPiece[1] == 'K':
+                            if possiblePin == ():
+                                inCheck = True
+                                check.append((endRow, endCol, d[0], d[1]))
+                                break
+                            else:
+                                pins.append(possiblePin)
+                                break                            
                         if d in vhDirection:
                             if endPiece[1] == 'R' or endPiece[1] == 'Q':
                                 if possiblePin == ():
                                     inCheck = True
-                                    check.append((endRow, endCol, r, c))
+                                    check.append((endRow, endCol, d[0], d[1]))
                                     break
                                 else:
                                     pins.append(possiblePin)
@@ -109,11 +151,12 @@ class GameState():
                             if endPiece[1] == 'B' or endPiece[1] == 'Q':
                                 if possiblePin == ():
                                     inCheck = True
-                                    check.append((endRow, endCol, r, c))
+                                    check.append((endRow, endCol, d[0], d[1]))
                                     break
                                 else:
                                     pins.append(possiblePin)
                                     break
+                        break # if you reach the emeny piece there is no need to check any more
 
         # Pawns Positions Checks
         if enemy == 'b':
@@ -143,7 +186,7 @@ class GameState():
                     endPiece = self.board[endRow][endCol]
                     if endPiece[0] == enemy and endPiece[1] == 'N':
                         inCheck = True
-                        check.append((endRow, endCol, r, c))
+                        check.append((endRow, endCol, d[0], d[1]))
 
         return (inCheck, pins, check)
 
