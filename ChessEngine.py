@@ -178,15 +178,13 @@ class GameState():
         knightDirection = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (1, 2), (1, -2), (2, 1), (2, -1))
         for j in range(len(knightDirection)):
             d = knightDirection[j]
-            possiblePin = ()
-            for i in range(1, 8):
-                endRow = r + d[0] * i
-                endCol = c + d[1] * i
-                if 0 <= endRow < 8 and 0 <= endCol < 8:
-                    endPiece = self.board[endRow][endCol]
-                    if endPiece[0] == enemy and endPiece[1] == 'N':
-                        inCheck = True
-                        check.append((endRow, endCol, d[0], d[1]))
+            endRow = r + d[0]
+            endCol = c + d[1]
+            if 0 <= endRow < 8 and 0 <= endCol < 8:
+                endPiece = self.board[endRow][endCol]
+                if endPiece[0] == enemy and endPiece[1] == 'N':
+                    inCheck = True
+                    check.append((endRow, endCol, d[0], d[1]))
 
         return (inCheck, pins, check)
 
