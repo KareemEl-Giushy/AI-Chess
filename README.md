@@ -57,7 +57,9 @@ Intended idea is to make an automated chess board where an AI algorithm could mo
 
 ---
 ## **Game State Matrix**
+
 The Game is played on this matrix where:
+
 <img width="364" alt="algorethem" src="src/gameMatrix.png">
 
 ### **Color:**
@@ -74,6 +76,7 @@ The Game is played on this matrix where:
 ## **System Architecture**
 
 ### Diagram Layout:
+
 <img width="364" alt="algorethem" src="src/diagram.jpg">
 
 ### **Main Components**:
