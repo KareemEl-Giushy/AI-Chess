@@ -96,7 +96,27 @@ class GameState():
             print(validSquares) # print valid squares for debuging
         else:
             moves = self.getAllPossibleMoves()           
+            if len(self.pins) != 0:
+                pins = self.getPinsMovement()
+                for i in range(len(moves) - 1, -1, -1):
+                    if moves[i] in pins:
+                        moves.remove(moves[i])
         return moves
+
+    def getPinsMovement(self):
+        pinMoves = []
+        for p in self.pins:
+            piece = self.board[p[0]][p[1]]
+            if (piece[0] == 'w' and self.whiteToMove) or (piece[0] == 'b' and not self.whiteToMove):
+                self.getFunctionMove[piece[1]](p[0], p[1], pinMoves)
+                for m in range(len(pinMoves) -1, -1, -1):
+                    self.makeMove(pinMoves[m])
+                    self.whiteToMove = not self.whiteToMove
+                    if not self.getPinsAndChecks()[0]: # added (not) to get invalid moves to remove it later
+                        pinMoves.remove(pinMoves[m])
+                    self.whiteToMove = not self.whiteToMove
+                    self.undoMove()
+        return pinMoves
 
     def getPinsAndChecks(self):
         pins = []
