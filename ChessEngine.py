@@ -73,6 +73,7 @@ class GameState():
         if self.inCheck:
             if len(self.checks) == 1: # only one check move king or block check
                 moves = self.getAllPossibleMoves() # get all possible move to remove the invalid
+                invalidKing = self.getInvalidKingMoves() 
                 check = self.checks[0]
                 checkRow = check[0]
                 checkCol = check[1]
@@ -87,13 +88,17 @@ class GameState():
                         if validSq[0] == checkRow and validSq[1] == checkCol: # once you reach the piece that is checking End Checks
                             break
                 for i in range(len(moves) - 1, -1, -1):
-                    if moves[i].pieceMoved != 'K':
+                    if moves[i].pieceMoved[1] != 'K':
                         if not (moves[i].endRow, moves[i].endCol) in validSquares: # if this possible move not in valid squares remove it
+                            moves.remove(moves[i])
+                    else:
+                        if moves[i] in invalidKing:
                             moves.remove(moves[i])
             else:
                 self.getKingMoves(kingRow, kingCol, moves)
 
             print(validSquares) # print valid squares for debuging
+            print(len(moves)) # How many Possible Moves (debuging)
         else:
             moves = self.getAllPossibleMoves()           
             if len(self.pins) != 0:
@@ -101,6 +106,12 @@ class GameState():
                 for i in range(len(moves) - 1, -1, -1):
                     if moves[i] in pins:
                         moves.remove(moves[i])
+            
+            invalidKing = self.getInvalidKingMoves()
+            for i in range(len(moves) - 1, -1, -1):
+                if moves[i] in invalidKing:
+                    moves.remove(moves[i])
+
         return moves
 
     def getPinsMovement(self):
@@ -117,6 +128,25 @@ class GameState():
                     self.whiteToMove = not self.whiteToMove
                     self.undoMove()
         return pinMoves
+
+    def getInvalidKingMoves(self):
+        if self.whiteToMove:
+            kingRow = self.whiteKingLocation[0]
+            kingCol = self.whiteKingLocation[1]
+        else:
+            kingRow = self.blackKingLocation[0]
+            kingCol = self.blackKingLocation[1]
+        moves =[]
+        self.getKingMoves(kingRow, kingCol, moves)
+        for i in range(len(moves) -1, -1, -1):
+            self.makeMove(moves[i])
+            self.whiteToMove = not self.whiteToMove
+            if not self.getPinsAndChecks()[0]: # added (not) to get invalid moves to remove it later
+                moves.remove(moves[i])
+            self.whiteToMove = not self.whiteToMove
+            self.undoMove()
+        
+        return moves
 
     def getPinsAndChecks(self):
         pins = []
