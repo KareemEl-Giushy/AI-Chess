@@ -82,12 +82,17 @@ def main():
                 if len(sqClicks) == 2:
                     mov = ChessEngine.Move(sqClicks[0], sqClicks[1], gs.board)
                     print(mov.getMoveNotation())
-                    if mov in vaildMoves:
-                        gs.makeMove(mov)
-                        moveMade = True
-                        selectedSq = ()
-                        sqClicks = []
-                    else:
+                    # ====================
+                    # It is Extremely Important To Make The Engine Generated Move NOT The User Move
+                    # This is Becasue It Has The Extra Flags Used In The Logic But The User Move Doesn't
+                    # ====================
+                    for v in vaildMoves:
+                        if mov == v:
+                            gs.makeMove(v)
+                            moveMade = True
+                            selectedSq = ()
+                            sqClicks = []
+                    if not moveMade:
                         sqClicks = [selectedSq]
             # Key Handlers
             elif e.type == p.KEYDOWN:
