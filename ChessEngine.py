@@ -196,7 +196,7 @@ class GameState():
                 for m in range(len(pinMoves) -1, -1, -1):
                     self.makeMove(pinMoves[m], bot=True)
                     self.whiteToMove = not self.whiteToMove
-                    if not self.inCheck: # added (not) to get invalid moves to remove it later
+                    if not self.getPinsAndChecks()[0]: # added (not) to get invalid moves to remove it later
                         pinMoves.remove(pinMoves[m])
                     self.whiteToMove = not self.whiteToMove
                     self.undoMove(bot=True)
@@ -214,7 +214,7 @@ class GameState():
         for i in range(len(moves) -1, -1, -1):
             self.makeMove(moves[i], bot=True)
             self.whiteToMove = not self.whiteToMove
-            if not self.inCheck: # added (not) to get invalid moves to remove it later
+            if not self.getPinsAndChecks()[0]: # added (not) to get invalid moves to remove it later
                 moves.remove(moves[i])
             self.whiteToMove = not self.whiteToMove
             self.undoMove(bot=True)
@@ -367,7 +367,9 @@ class GameState():
         while 0 <= i < 8: # Move Forward On The Board (vertically on board)
             if self.board[i][c] == '--':
                 moves.append(Move((r, c), (i, c), self.board))
-            elif self.board[i][c][0] == color:
+            else:
+                if self.board[i][c][0] != color:
+                    moves.append(Move((r, c), (i, c), self.board))
                 break
             i += 1
         
@@ -375,7 +377,9 @@ class GameState():
         while 0 <= i < 8: 
             if self.board[i][c] == '--': # Move backward On The Board (vertically on board)
                 moves.append(Move((r, c), (i, c), self.board))
-            elif self.board[i][c][0] == color:
+            else:
+                if self.board[i][c][0] != color:
+                    moves.append(Move((r, c), (i, c), self.board))
                 break
             i -= 1
         
@@ -383,7 +387,9 @@ class GameState():
         while 0 <= j < 8: # Move Forward On The Board (Horizontally on board)
             if self.board[r][j] == '--':
                 moves.append(Move((r, c), (r, j), self.board))
-            elif self.board[r][j][0] == color:
+            else:
+                if self.board[r][j][0] != color:
+                    moves.append(Move((r, c), (r, j), self.board))
                 break
             j += 1
         
@@ -391,7 +397,9 @@ class GameState():
         while 0 <= j < 8: # Move backward On The Board (Horizontally on board)
             if self.board[r][j] == '--':
                 moves.append(Move((r, c), (r, j), self.board))
-            elif self.board[r][j][0] == color:
+            else:
+                if self.board[r][j][0] != color:
+                    moves.append(Move((r, c), (r, j), self.board))
                 break
             j -= 1
 
@@ -421,7 +429,9 @@ class GameState():
         while 0 <= i < 8 and 0 <= j < 8:
             if self.board[i][j] == '--':
                 moves.append(Move((r, c), (i, j), self.board))
-            elif self.board[i][j][0] == color:
+            else:
+                if self.board[i][j][0] != color:
+                    moves.append(Move((r, c), (i, j), self.board))
                 break
             i += 1
             j += 1
@@ -432,7 +442,9 @@ class GameState():
         while 0 <= i < 8 and 0 <= j < 8:
             if self.board[i][j] == '--':
                 moves.append(Move((r, c), (i, j), self.board))
-            elif self.board[i][j][0] == color:
+            else:
+                if self.board[i][j][0] != color:
+                    moves.append(Move((r, c), (i, j), self.board))
                 break
             i += 1
             j -= 1
@@ -443,7 +455,9 @@ class GameState():
         while 0 <= i < 8 and 0 <= j < 8:
             if self.board[i][j] == '--':
                 moves.append(Move((r, c), (i, j), self.board))
-            elif self.board[i][j][0] == color:
+            else:
+                if self.board[i][j][0] != color:
+                    moves.append(Move((r, c), (i, j), self.board))
                 break
             i -= 1
             j += 1
@@ -454,7 +468,9 @@ class GameState():
         while 0 <= i < 8 and 0 <= j < 8:
             if self.board[i][j] == '--':
                 moves.append(Move((r, c), (i, j), self.board))
-            elif self.board[i][j][0] == color:
+            else:
+                if self.board[i][j][0] != color:
+                    moves.append(Move((r, c), (i, j), self.board))
                 break
             i -= 1
             j -= 1
