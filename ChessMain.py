@@ -34,6 +34,7 @@ def drawGameState(screen, gs, validMoves, sqSelected):
 
 # ** The top left squre is always white (black bottom left)**
 def drawBoard(screen):
+    global color
     for i in range(DIMENSION):
         for j in range(DIMENSION):
             color = BOARD_COLOR[(i + j) % 2 ] # if it is even it's white, if it is odd it's gray
@@ -65,7 +66,30 @@ def highlightSquares(screen, gs, validMoves, sqSelected):
                 if m.startRow == r and m.startCol == c:
                     screen.blit(s, (SQ_size * m.endCol, SQ_size * m.endRow))
 
+# ==================
+# Animating Movement
+# ==================
+def animateMove(move, screen, board, clock):
+    global color
+    dR = move.endRow - move.startRow
+    dC = move.endCol - move.startCol
+    framesPerSquare = 10
+    frameCount = (abs(dR) + abs(dC)) * framesPerSquare
+    for frame in range(frameCount + 1):
+        r, c = (move.startRow + dR * frame/frameCount, move.startCol + dC * frame/frameCount)
+        drawBoard(screen)
+        drawPieces(screen, board)
+        # erase the piece moved from its ending square
+        color = color[(move.endRow + move.endCol) % 2]
+        endSquare = p.Rect(move.endCol * SQ_size, move.endRow * SQ_size, SQ_size, SQ_size)
+        p.draw.rect(screen, color, endSquare)
+        #draw The Captured Piece onto rectangle
+        if move.pieceCaptured != "--":
+            screen.blit(IMAGES[move.pieceCaptured], endSquare)
 
+        screen.blit(IMAGES[move.pieceMoved], p.Rect(c * SQ_size, r * SQ_size, SQ_size, SQ_size))
+        p.display.flip()
+        clock.tick(60)
 
 def main():
     p.init()
@@ -76,49 +100,64 @@ def main():
     gs = ChessEngine.GameState()
     vaildMoves = gs.getValidMoves()
     moveMade = False # Flag Variable to triger movement
+    animate = False # animate Flag Variable To triger Animation
+
     loadImages() # load only once
     running = True
     selectedSq = ()
     sqClicks = []
+    gameOver = False
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
             # Mouse Handlers
             elif e.type == p.MOUSEBUTTONDOWN:
-                location = p.mouse.get_pos()
-                row = location[1] // SQ_size
-                col = location[0] // SQ_size
-                
-                if selectedSq == (row, col):
-                    selectedSq = ()
-                    sqClicks = []
-                else:
-                    selectedSq = (row, col)
-                    sqClicks.append(selectedSq)
-                
-                if len(sqClicks) == 2:
-                    mov = ChessEngine.Move(sqClicks[0], sqClicks[1], gs.board)
-                    print(mov.getMoveNotation())
-                    # ====================
-                    # It is Extremely Important To Make The Engine Generated Move NOT The User Move
-                    # This is Becasue It Has The Extra Flags Used In The Logic But The User Move Doesn't
-                    # ====================
-                    for v in vaildMoves:
-                        if mov == v:
-                            gs.makeMove(v)
-                            moveMade = True
-                            selectedSq = ()
-                            sqClicks = []
-                    if not moveMade:
-                        sqClicks = [selectedSq]
+                if not gameOver:
+                    location = p.mouse.get_pos()
+                    row = location[1] // SQ_size
+                    col = location[0] // SQ_size
+                    
+                    if selectedSq == (row, col):
+                        selectedSq = ()
+                        sqClicks = []
+                    else:
+                        selectedSq = (row, col)
+                        sqClicks.append(selectedSq)
+                    
+                    if len(sqClicks) == 2:
+                        mov = ChessEngine.Move(sqClicks[0], sqClicks[1], gs.board)
+                        print(mov.getMoveNotation())
+                        # ====================
+                        # It is Extremely Important To Make The Engine Generated Move NOT The User Move
+                        # This is Becasue It Has The Extra Flags Used In The Logic But The User Move Doesn't
+                        # ====================
+                        for v in vaildMoves:
+                            if mov == v:
+                                gs.makeMove(v)
+                                moveMade = True
+                                animate = True
+                                selectedSq = ()
+                                sqClicks = []
+                        if not moveMade:
+                            sqClicks = [selectedSq]
             # Key Handlers
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_z:
                     gs.undoMove()
                     moveMade = True
+                    animate = False
+                elif e.key -- p.K_r: # Reset The Board When R is Pressed
+                    gs = ChessEngine.GameState()
+                    vaildMoves = gs.getValidMoves()
+                    selectedSq = ()
+                    sqClicks = []
+                    moveMade = False
+                    animate = False
         
         if moveMade:
+            if len(gs.moveLog) and animate:
+                animateMove(gs.moveLog[-1], screen, gs.board, clock)
             vaildMoves = gs.getValidMoves()
             moveMade = False
 
