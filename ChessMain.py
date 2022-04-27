@@ -147,7 +147,7 @@ def main():
                     gs.undoMove()
                     moveMade = True
                     animate = False
-                elif e.key -- p.K_r: # Reset The Board When R is Pressed
+                elif e.key == p.K_r: # Reset The Board When R is Pressed
                     gs = ChessEngine.GameState()
                     vaildMoves = gs.getValidMoves()
                     selectedSq = ()
