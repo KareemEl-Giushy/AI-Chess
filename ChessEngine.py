@@ -35,6 +35,8 @@ class GameState():
         self.blackKingLocation = (0, 4)
         self.whiteKingLocation = (7, 4)
         self.inCheck = False
+        self.checkmate = False
+        self.stalemate = False
         self.pins = []
         self.checks = []
         self.enpassantPossible = () # coordinates where en passant is possible
@@ -184,6 +186,12 @@ class GameState():
             for i in range(len(moves) - 1, -1, -1):
                 if moves[i] in invalidKing:
                     moves.remove(moves[i])
+
+        if len(moves) == 0:
+            if self.inCheck:
+                self.checkmate = True
+            else:
+                self.stalemate = True
 
         return moves
 
