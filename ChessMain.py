@@ -91,6 +91,17 @@ def animateMove(move, screen, board, clock):
         p.display.flip()
         clock.tick(60)
 
+# ===============================================
+# Drawing Text On The Screen (Wins and Stalemate)
+# ===============================================
+def drawText(screen, text):
+    font = p.font.SysFont("Helvitca", 32, True, False)
+    textObject = font.render(text, 0, p.Color("black"))
+    textLocation = p.Rect(0, 0, WIDTH, HIGHT).move(WIDTH / 2 - textObject.get_width() / 2, HIGHT / 2 - textObject.get_height() / 2)
+    screen.blit(textObject, textLocation)
+    textObject = font.render(text, 0, p.Color("gray"))
+    screen.blit(textObject, textLocation.move(2, 2))
+
 def main():
     p.init()
     screen = p.display.set_mode((WIDTH, HIGHT))
@@ -162,6 +173,17 @@ def main():
             moveMade = False
 
         drawGameState(screen, gs, vaildMoves, selectedSq)
+
+        if gs.checkmate:
+            gameOver = True
+            if gs.whiteToMove:
+                drawText(screen, "Black Wins By Checkmate")
+            else:
+                drawText(screen, "White Wins By Checkmate")
+        elif gs.stalemate:
+            gameOver = True
+            drawText(screen, "Stalemate")
+
         clock.tick(MAX_FPS)
         p.display.flip()
 
