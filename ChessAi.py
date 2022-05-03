@@ -9,24 +9,33 @@ def findRandomMove(validMoves):
 
 def findBestMove(gs, validMoves):
     turnMultiplier = 1 if gs.whiteToMove else -1
-    maxScore = -CHECKMATE
-    bestMove = None
+    opponentMinMaxScore = CHECKMATE
+    bestPlaryMove = None
+    random.shuffle(validMoves)
     for playerMove in validMoves:
         gs.makeMove(playerMove, bot=True)
-        if gs.checkmate:
-            score = CHECKMATE
-        elif gs.stalemate:
-            score = 0
-        else:
-            score = turnMultiplier * scoreMaterial(gs.board)
-        if score > maxScore:
-            maxScore = score
-            bestMove = playerMove
+        opponentValidMoves = gs.getValidMoves()
+        opponentMaxScore = -CHECKMATE
+        for opponentMove in opponentValidMoves:
+            gs.makeMove(opponentMove, bot=True)
+            if gs.checkmate:
+                score = -turnMultiplier * CHECKMATE
+            elif gs.stalemate:
+                score = 0
+            else:
+                score = -turnMultiplier * scoreMaterial(gs.board) # it became The opposite Color playing
+            if score > opponentMaxScore:
+                opponentMaxScore = score
+            gs.undoMove(bot=True)
+        if opponentMaxScore < opponentMinMaxScore:
+            opponentMinMaxScore = opponentMaxScore
+            bestPlaryMove = playerMove
+            
         gs.undoMove(bot=True)
 
-    return bestMove
+    return bestPlaryMove
 
-def scoreMaterial(board):
+def scoreMaterial(board: list):
     score = 0
     for row in board:
         for square in row:
