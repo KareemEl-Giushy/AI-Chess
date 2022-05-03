@@ -96,10 +96,10 @@ def animateMove(move, screen, board, clock):
 # ===============================================
 def drawText(screen, text):
     font = p.font.SysFont("Helvitca", 32, True, False)
-    textObject = font.render(text, 0, p.Color("black"))
+    textObject = font.render(text, 0, p.Color("gray"))
     textLocation = p.Rect(0, 0, WIDTH, HIGHT).move(WIDTH / 2 - textObject.get_width() / 2, HIGHT / 2 - textObject.get_height() / 2)
     screen.blit(textObject, textLocation)
-    textObject = font.render(text, 0, p.Color("gray"))
+    textObject = font.render(text, 0, p.Color("black"))
     screen.blit(textObject, textLocation.move(2, 2))
 
 def main():
