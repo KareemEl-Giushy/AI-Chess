@@ -16,17 +16,23 @@ def findBestMove(gs, validMoves):
         gs.makeMove(playerMove, bot=True)
         opponentValidMoves = gs.getValidMoves()
         opponentMaxScore = -CHECKMATE
-        for opponentMove in opponentValidMoves:
-            gs.makeMove(opponentMove, bot=True)
-            if gs.checkmate:
-                score = -turnMultiplier * CHECKMATE
-            elif gs.stalemate:
-                score = 0
-            else:
-                score = -turnMultiplier * scoreMaterial(gs.board) # it became The opposite Color playing
-            if score > opponentMaxScore:
-                opponentMaxScore = score
-            gs.undoMove(bot=True)
+        if gs.stalemate:
+            opponentMaxScore = 0
+        elif gs.checkmate:
+            opponentMaxScore = -CHECKMATE   
+        else:
+            for opponentMove in opponentValidMoves:
+                gs.makeMove(opponentMove, bot=True)
+                if gs.checkmate:
+                    score = CHECKMATE
+                elif gs.stalemate:
+                    score = 0
+                else:
+                    score = -turnMultiplier * scoreMaterial(gs.board) # it became The opposite Color playing
+                if score > opponentMaxScore:
+                    opponentMaxScore = score
+                gs.undoMove(bot=True)
+        
         if opponentMaxScore < opponentMinMaxScore:
             opponentMinMaxScore = opponentMaxScore
             bestPlaryMove = playerMove
