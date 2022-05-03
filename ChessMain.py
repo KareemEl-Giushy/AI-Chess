@@ -162,6 +162,7 @@ def main():
                     gs.undoMove()
                     moveMade = True
                     animate = False
+                    gameOver = False
                 elif e.key == p.K_r: # Reset The Board When R is Pressed
                     gs = ChessEngine.GameState()
                     validMoves = gs.getValidMoves()
@@ -169,6 +170,7 @@ def main():
                     sqClicks = []
                     moveMade = False
                     animate = False
+                    gameOver = False
 
         # AI Move Finder Logic
         if not gameOver and not humanTurn:
