@@ -138,6 +138,7 @@ class GameState():
     def getValidMoves(self):
         print(self.getPinsAndChecks())
         self.inCheck, self.pins, self.checks = self.getPinsAndChecks()
+        moves = []
         if self.whiteToMove:
             kingRow = self.whiteKingLocation[0]
             kingCol = self.whiteKingLocation[1]
@@ -170,7 +171,8 @@ class GameState():
                         if moves[i] in invalidKing:
                             moves.remove(moves[i])
             else:
-                self.getKingMoves(kingRow, kingCol, moves)
+                print("2 Checks")
+                return self.getKingMoves(kingRow, kingCol, moves)
 
             print(validSquares) # print valid squares for debuging
             print(len(moves)) # How many Possible Moves (debuging)
