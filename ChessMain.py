@@ -110,7 +110,7 @@ def main():
     screen.fill(p.Color("white"))
     # Game State
     gs = ChessEngine.GameState()
-    vaildMoves = gs.getValidMoves()
+    validMoves = gs.getValidMoves()
     moveMade = False # Flag Variable to triger movement
     animate = False # animate Flag Variable To triger Animation
 
@@ -147,7 +147,7 @@ def main():
                         # It is Extremely Important To Make The Engine Generated Move NOT The User Move
                         # This is Becasue It Has The Extra Flags Used In The Logic But The User Move Doesn't
                         # ====================
-                        for v in vaildMoves:
+                        for v in validMoves:
                             if mov == v:
                                 gs.makeMove(v)
                                 moveMade = True
@@ -164,7 +164,7 @@ def main():
                     animate = False
                 elif e.key == p.K_r: # Reset The Board When R is Pressed
                     gs = ChessEngine.GameState()
-                    vaildMoves = gs.getValidMoves()
+                    validMoves = gs.getValidMoves()
                     selectedSq = ()
                     sqClicks = []
                     moveMade = False
@@ -180,10 +180,10 @@ def main():
         if moveMade:
             if len(gs.moveLog) and animate:
                 animateMove(gs.moveLog[-1], screen, gs.board, clock)
-            vaildMoves = gs.getValidMoves()
+            validMoves = gs.getValidMoves()
             moveMade = False
 
-        drawGameState(screen, gs, vaildMoves, selectedSq)
+        drawGameState(screen, gs, validMoves, selectedSq)
 
         if gs.checkmate:
             gameOver = True
