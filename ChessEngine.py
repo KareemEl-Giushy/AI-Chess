@@ -291,19 +291,24 @@ class GameState():
 
         # Pawns Positions Checks
         if enemy == 'b':
-            if self.board[r-1][c-1][0] == enemy and self.board[r-1][c-1][1] == 'P':
-                inCheck = True
-                check.append((r-1, c-1, -1, -1))
-            if self.board[r-1][c+1][0] == enemy and self.board[r-1][c+1][1] == 'P':
-                inCheck = True
-                check.append((r-1, c+1, -1, 1))
+            if 0 <= r - 1 < 8 and 0 <= c - 1 < 8:
+                if self.board[r-1][c-1] == enemy + 'P':
+                    inCheck = True
+                    check.append((r-1, c-1, -1, -1))
+            
+            if 0 <= r - 1 < 8 and 0 <= c + 1 < 8:
+                if self.board[r-1][c+1] == enemy + 'P':
+                    inCheck = True
+                    check.append((r-1, c+1, -1, 1))
         else:
-            if self.board[r+1][c-1][0] == enemy and self.board[r+1][c-1][1] == 'P':
-                inCheck = True
-                check.append((r+1, c-1, 1, -1))
-            if self.board[r+1][c+1][0] == enemy and self.board[r+1][c+1][1] == 'P':
-                inCheck = True
-                check.append((r+1, c+1, 1, 1))
+            if 0 <= r + 1 < 8 and 0 <= c - 1 < 8:
+                if self.board[r+1][c-1] == enemy + 'P':
+                    inCheck = True
+                    check.append((r+1, c-1, 1, -1))
+            if 0 <= r + 1 < 8 and 0 <= c + 1 < 8:
+                if self.board[r+1][c+1] == enemy + 'P':
+                    inCheck = True
+                    check.append((r+1, c+1, 1, 1))
 
         # Knights Positions Checks
         knightDirection = ((-2, 1), (-2, -1), (-1, 2), (-1, -2), (1, 2), (1, -2), (2, 1), (2, -1))
