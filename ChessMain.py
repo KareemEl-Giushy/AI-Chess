@@ -7,6 +7,7 @@ current state GameState Object
 import pygame as p
 import os
 import ChessEngine
+import ChessAi
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 WIDTH = HIGHT = 512 # 400
@@ -118,13 +119,16 @@ def main():
     selectedSq = ()
     sqClicks = []
     gameOver = False
+    playerOne = True # If Human Is White This will Be True
+    playerTwo = False
     while running:
+        humanTurn = (gs.whiteToMove and playerOne) or (not gs.whiteToMove and playerTwo)
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
             # Mouse Handlers
             elif e.type == p.MOUSEBUTTONDOWN:
-                if not gameOver:
+                if not gameOver and humanTurn:
                     location = p.mouse.get_pos()
                     row = location[1] // SQ_size
                     col = location[0] // SQ_size
@@ -165,7 +169,14 @@ def main():
                     sqClicks = []
                     moveMade = False
                     animate = False
-        
+
+        # AI Move Finder Logic
+        if not gameOver and not humanTurn:
+            AIMove = ChessAi.findRandomMove(vaildMoves)
+            gs.makeMove(AIMove)
+            moveMade = True
+            animate = True
+
         if moveMade:
             if len(gs.moveLog) and animate:
                 animateMove(gs.moveLog[-1], screen, gs.board, clock)
