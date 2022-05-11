@@ -175,9 +175,9 @@ class GameState():
                             moves.remove(moves[i])
             else:
                 print("2 Checks")
-                return self.getKingMoves(kingRow, kingCol, moves)
+                self.getKingMoves(kingRow, kingCol, moves)
 
-            print(validSquares) # print valid squares for debuging
+            # print(validSquares) # print valid squares for debuging
             print(len(moves)) # How many Possible Moves (debuging)
         else:
             moves = self.getAllPossibleMoves()           
