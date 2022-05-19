@@ -1,6 +1,8 @@
 # **Automated Chess**
 Intended idea is to make an automated chess board where an AI algorithm could move pieces by itself on a physical chess board. It will have the ability to perform attacks and defenses against its opponent
 
+Project Walkthrough (Presentation): [Video](https://bit.ly/38C703u "Video")
+
 ---
 ## P.E.A.S.
 
